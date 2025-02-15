@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Ensure the body and html take up full height */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            overflow-y: auto;
+        }
+
+        body {
+            display: flex;
+            flex-direction: row; /* Default to row layout for desktop */
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            width: 15%; /* Sidebar takes 15% of the width */
+            background-color: #343a40;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding-top: 10px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        .sidebar .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .sidebar .logo-container img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .sidebar .logo-container h5 {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 0;
+            color: #fff;
+        }
+
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .sidebar .logout {
+            margin-top: auto;
+        }
+
+        .sidebar .logout a {
+            padding: 10px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        /* Main content area */
+        .content {
+            flex: 1;
+            padding-top: 20px;
+            background-color: #f8f9fa;
+            overflow-y: auto;
+            overflow-x: hidden;
+            margin-left: 15%; /* Ensure content starts after the sidebar */
+            height: 100vh;
+        }
+
+        /* General Stat Box Styles */
+        .stat-box {
+            background: linear-gradient(135deg, #6e7dff, #5860e2);
+            padding: 15px;
+            margin: 15px auto;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            color: #fff;
+            width: 100%;
+            max-width: 400px;
+            display: block;
+            position: relative;
+        }
+
+        .stat-box h4 {
+            font-weight: 500;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            font-size: 1.25rem;
+        }
+
+        .stat-box p {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .stat-box .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .stat-box .stat-box-content {
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Hover Effects */
+        .stat-box:hover {
+            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+            cursor: pointer;
+        }
+
+        .stat-box:hover .icon {
+            transform: scale(1.1);
+        }
+
+        .stat-box .stat-box-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .stat-box .stat-box-body {
+            font-size: 1rem;
+        }
+
+        /* Updated Gradient Colors */
+        .stat-box.lead {
+            background: linear-gradient(135deg, #FF5733, #C70039);
+        }
+
+        .stat-box.active-lead {
+            background: linear-gradient(135deg, #28A745, #218838);
+        }
+
+        .stat-box.inactive-lead {
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+        }
+
+        .stat-box.vendor {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+        }
+
+        /* Label Style */
+        .stat-box span {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        /* Active tab background color */
+        .sidebar a.active-tab {
+            background-color: #FF5733;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        h6 {
+            color: #FF5733;
+            text-align: end;
+            padding-right: 20px;
+        }
+
+        iframe {
+            margin-bottom: 25px;
+        }
+
+        .footer {
+            background-color: #343a40;
+            color: #fff;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 85%;
+            text-align: center;
+            padding-left: 0;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .content {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .sidebar a i {
+                display: inline-block; /* Show icons on mobile */
+            }
+
+            .sidebar a {
+                font-size: 14px;
+            }
+
+            .stat-box {
+                width: 90%;
+                max-width: none;
+                height: auto;
+            }
+
+            iframe {
+                height: 400px;
+            }
+
+            .footer {
+                position: static;
+                width: 100%;
+            }
+
+            h6 {
+                text-align: start;
+                padding-left: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-container" style="background-color: orange;">
+            <a href="https://quickcabpune.com/dashboard/dashboard.html">
+                <img src="admin.jpg" alt="Admin Logo" class="img-fluid">
+                <h5>Admin Panel</h5>
+            </a>
+        </div>
+        <hr style="margin-top: 0px; border: 1px solid;">
+        <a href="vendordetails.php" target="content-frame" class="menu-link" data-title="Vendor Details">
+            <i class="fa-solid fa-truck"></i> Vendor Details
+        </a>
+        <a href="lead.php" target="content-frame" class="menu-link" data-title="Leads">
+            <i class="fa-solid fa-users"></i> Leads
+        </a>
+        <a href="help_support.php" target="content-frame" class="menu-link" data-title="Help & Support">
+            <i class="fa-solid fa-headset"></i> Help & Support
+        </a>
+        <a href="category.php" target="content-frame" class="menu-link" data-title="Category">
+            <i class="fa-solid fa-list"></i> Category
+        </a>
+        <a href="cities.php" target="content-frame" class="menu-link" data-title="Cities">
+            <i class="fa-solid fa-city"></i> Cities
+        </a>
+        <a href="subpackages.php" target="content-frame" class="menu-link" data-title="Sub Packages">
+            <i class="fa-solid fa-box"></i> Sub Packages
+        </a>
+
+        <form action="logout.php" method="POST" class="mt-4">
+            <button type="submit" class="nav-link btn btn-link text-white" style="margin-left: 15px;" >
+                <i class="fa fa-sign-out"></i> Logout
+            </button>
+        </form>
+
+        <!-- Sidebar Logo at the Bottom -->
+        <div class="mt-auto text-center mb-4">
+            <a href="../images/resources/Quick_cab_logo.png" target="_blank">
+                <img src="../images/resources/Quick_cab_logo.png" alt="Logo" class="img-fluid" style="height:auto; width:100%; margin: 0px; padding: 0;">
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <h6>Welcome, <strong>Quick Cab Services!</strong></h6>
+
+        <!-- Stats Section -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="stat-box vendor active-stat-box" id="vendorStats">
+                    <div class="stat-box-header">
+                        <div class="icon"><i class="fa-solid fa-truck"></i></div>
+                        <h4>Total Vendors</h4>
+                    </div>
+                    <div class="stat-box-body">
+                        <p id="vendorCount">Loading...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="stat-box lead active-stat-box" id="totalLeadStats">
+                    <div class="stat-box-header">
+                        <div class="icon"><i class="fa-solid fa-users"></i></div>
+                        <h4>Total Leads</h4>
+                    </div>
+                    <div class="stat-box-body">
+                        <p id="totalLeadCount">Loading...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="stat-box active-lead active-stat-box" id="activeLeadStats">
+                    <div class="stat-box-header">
+                        <div class="icon"><i class="fa-solid fa-user-check"></i></div>
+                        <h4>Active Leads</h4>
+                    </div>
+                    <div class="stat-box-body">
+                        <p id="activeLeadCount">Loading...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="stat-box inactive-lead inactive-stat-box" id="inactiveLeadStats">
+                    <div class="stat-box-header">
+                        <div class="icon"><i class="fa-solid fa-user-slash"></i></div>
+                        <h4>Inactive Leads</h4>
+                    </div>
+                    <div class="stat-box-body">
+                        <p id="inactiveLeadCount">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Placeholder (iframe will load here) -->
+        <div id="content-placeholder">
+            <!-- Dynamic content will be loaded here -->
+        </div>
+
+        <footer class="footer">
+            <div class="container-fluid w-100">
+                <span>Copyright © 2024 <a href="#">Quick Cab</a> | All Right Reserved | <a href="https://quickcabpune.com/privacy-policy.html">Privacy Policy </a> | <a href="terms-conditions.html">Terms and Conditions</a></span>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Fetch stats data and populate the stats section
+            fetch('dashboard_stats.php')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('vendorCount').textContent = data.total_vendors;
+                    document.getElementById('totalLeadCount').textContent = data.total_leads;
+                    document.getElementById('activeLeadCount').textContent = data.active_leads;
+                    document.getElementById('inactiveLeadCount').textContent = data.inactive_leads;
+                })
+                .catch(error => console.error('Error fetching stats:', error));
+
+            const menuLinks = document.querySelectorAll('.menu-link');
+            const statsRow = document.querySelector('.row'); // The stats row container
+            const contentPlaceholder = document.getElementById('content-placeholder');
+
+            menuLinks.forEach(link => {
+                link.addEventListener('click', event => {
+                    event.preventDefault();
+
+                    // Remove the "active" class from all links
+                    menuLinks.forEach(menu => menu.classList.remove('active-tab'));
+
+                    // Add the "active" class to the clicked link
+                    link.classList.add('active-tab');
+
+                    // Hide the stats section
+                    statsRow.style.display = 'none';
+
+                    // Create and display an iframe for the selected content
+                    const iframe = document.createElement('iframe');
+                    iframe.src = link.getAttribute('href');
+                    iframe.name = "content-frame";
+                    iframe.style.width = "100%";
+                    iframe.style.height = "100vh"; // Full height for iframe
+                    iframe.style.border = "none"; // Remove border
+                    iframe.style.overflow = "hidden"; // Prevent scrolling
+
+                    // Clear the content area and add the iframe
+                    contentPlaceholder.innerHTML = '';
+                    contentPlaceholder.appendChild(iframe);
+                });
+            });
+
+            // Add click listeners to the stat boxes
+            const statBoxes = {
+                vendorStats: "vendordetails.php",
+                totalLeadStats: "lead.php",
+                activeLeadStats: "lead.php",
+                inactiveLeadStats: "lead.php"
+            };
+
+            Object.keys(statBoxes).forEach(statId => {
+                const statBox = document.getElementById(statId);
+                if (statBox) {
+                    statBox.addEventListener('click', () => {
+                        // Find the corresponding menu link for the stat box
+                        const targetLink = Array.from(menuLinks).find(link =>
+                            link.getAttribute('href') === statBoxes[statId]
+                        );
+                        if (targetLink) {
+                            targetLink.click();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
