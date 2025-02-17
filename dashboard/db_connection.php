@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';
-$dbname = 'Quick_cab';
+$dbname = 'sync_quickcab_db';
 $username = 'root';
-$password = '';
+$password = 'Sync@116';
 
 $conn = new mysqli($host, $username, $password, $dbname);
 
